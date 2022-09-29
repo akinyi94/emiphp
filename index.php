@@ -5,7 +5,9 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="bootstrap">
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <script src="bootstrap/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <h1>Staff Details</h1>
@@ -24,6 +26,12 @@
     <option name="male" id="">Male</option>
     <option name="other" id="">Other</option>
 </select>
+<label for=""><b>Position:</b></label>
+<input type="text" name="position" id="" required><br>
+<label for=""><b>Department:</b></label>
+<input type="text" name="department" id="" required><br>
+<label for=""><b>Join Date:</b></label>
+<input type="date" name="date" id="" required>
 
     </form>
 </body>
