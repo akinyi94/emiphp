@@ -1,6 +1,10 @@
 <?php
 include 'dbconn.php';
 
+$sql="select * from staff_details;";
+
+$result=mysqli_query($conn,$sql);
+
 if($_SERVER["REQUEST_METHOD"]  == "POST"){
     $fname=mysqli_real_escape_string($conn,input_cleaner($_POST['fname']));
     $mname=mysqli_real_escape_string($conn,input_cleaner($_POST['mname']));
@@ -9,28 +13,29 @@ if($_SERVER["REQUEST_METHOD"]  == "POST"){
     $position=mysqli_real_escape_string($conn,input_cleaner($_POST['position']));
     $department=mysqli_real_escape_string($conn,input_cleaner($_POST['department']));
 
-    $id='1';
+
+    $id=mysqli_real_escape_string($conn,input_cleaner($_POST['staff_id']));;
 
 
     $sql='';
 
     if($fname!=''){
-        $sql.="update staff set firstname = '$fname' where staffid = $id; ";
+        $sql.="update staff_details set first_name = '$fname' where staff_ID = $id; ";
     }
     if($mname!=''){
-        $sql.="update staff set middlename = '$mname' where staffid = $id; ";
+        $sql.="update staff_DETAILS set middle_name = '$mname' where staff_ID = $id; ";
     }
     if($lname!=''){
-        $sql.="update staff set lastname = '$lname' where staffid = $id;";
+        $sql.="update staff_DETAILS set last_name = '$lname' where staff_ID = $id;";
     }
     if($gender!=''){
-        $sql.="update staff set gender = '$gender' where staffid = $id;";
+        $sql.="update staff_DETAILS set gender = '$gender' where staff_ID = $id;";
     }
     if($position!=''){
-        $sql.="update staff set position = '$position' where staffid = $id;";
+        $sql.="update staff_DETAILS set position = '$position' where staff_ID = $id;";
     }
     if($department!=''){
-        $sql.="update staff set department = '$department' where staffid = $id;";
+        $sql.="update staff_DETAILS set department = '$department' where staff_ID = $id;";
     }
 
     if($sql != ""){
@@ -51,7 +56,9 @@ function input_cleaner($input){
     return$input;
 }
 
-?>
+
+        ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -62,6 +69,18 @@ function input_cleaner($input){
 </head>
 <body>
     <form action="<?php htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="POST">
+    <select name="staff_id" id="">
+        <?php 
+        if($result->num_rows > 0){
+            while($row=$result->fetch_assoc()){
+                ?>
+        <option value="<?php echo $row['Staff_ID']; ?>"><?php echo $row['First_Name']; ?></option>
+<?php 
+            }
+        }
+?>
+    </select>
+    <br>
     <input type="text" name="fname" id="" placeholder =" firstname"><br>
     <input type="text" name="mname" id="" placeholder =" middlename"><br>
     <input type="text" name="lname" id="" placeholder =" lastname"><br>
