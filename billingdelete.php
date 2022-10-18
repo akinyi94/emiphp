@@ -3,14 +3,14 @@ include 'dbconn.php';
 
 
 if($_SERVER['REQUEST_METHOD']=='POST'){
-    $id=mysqli_real_escape_string($conn,$_POST['user_id']);
+    $id=mysqli_real_escape_string($conn,$_POST['invoice_number']);
     
     if($id!=''){
-        $sql="delete from users where user_id = $id;";
+        $sql="delete from billing where invoice_number = $id;";
 
         if(mysqli_query($conn,$sql)){
             echo "success";
-            header('location: users_add.php');
+            header('location: invoice_add.php');
         }else{
             echo mysqli_error($conn);
         }
@@ -18,7 +18,7 @@ if($_SERVER['REQUEST_METHOD']=='POST'){
 }
 
 //get existing users by id
-$sql= 'select user_id from users;';
+$sql= 'select invoice_number from billing;';
 
 $result=mysqli_query($conn,$sql);
 
@@ -33,12 +33,12 @@ $result=mysqli_query($conn,$sql);
 </head>
 <body>
 <form action="<?php htmlspecialchars($_SERVER['PHP_SELF'])?>" method="post">
-    <select name="user_id" id="">
+    <select name="invoice_number" id="">
         <?php
         if(mysqli_num_rows($result) > 0){
             while ($row =mysqli_fetch_assoc($result)){
         ?>
-        <option value="<?php echo $row['user_id'];?>"><?php echo $row['user_id'];?></option>
+        <option value="<?php echo $row['invoice_number'];?>"><?php echo $row['invoice_number'];?></option>
     
         <?php
 }

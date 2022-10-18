@@ -1,38 +1,75 @@
+<?php
+session_start();
+
+include 'dbconn.php';
+
+if ($_SESSION['auth'] > 0 ){
+    header("location:users_add.php");
+}
+
+$_SESSION['auth']=0;
+
+if($_SERVER['REQUEST_METHOD']=='POST'){
+    $username=mysqli_real_escape_string($conn,$_POST['username']);
+    $password=mysqli_real_escape_string($conn,$_POST['password']);
+
+    $sql="SELECT * FROM users WHERE username='$username' AND password='$password';";
+
+    $result=mysqli_query($conn,$sql);
+
+    // 'system_administrator','administrator','front_office','accounts','management'
+
+if(mysqli_num_rows($result) > 0){
+    // header('location:receipt.php');
+    // echo('login successful');
+        while ($row =mysqli_fetch_assoc($result)){
+            if ($row['user_group']=="system_administrator"){
+                $_SESSION['auth']=5;
+            }else if($row['user_group']=="administrator") {
+                $_SESSION['auth']=4;
+            }else if($row['user_group']=="front_office") {
+                $_SESSION['auth']=3;
+            }else if($row['user_group']=="accounts") {
+                $_SESSION['auth']=2;
+            }else if($row['user_group']=="management") {
+                $_SESSION['auth']=1;
+            }
+
+        }
+
+        echo($_SESSION['auth']);
+        header('location:receipt_add.php');
+}
+}
+
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-    <script src="bootstrap/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="style.css">
+    <title>login</title>
+    <link rel="stylesheet" href="css/users.css">
 </head>
 <body>
-    <h1>Staff Details</h1>
-    <form action="" method="post">
- <label for=""><b>Staff ID :</b></label>       
-<input type="text" name="Staff ID" id="" placeholder="your ID" required><br>
-<label for=""><b>First Name :</b></label>
-<input type="text" name="First Name" id="" placeholder="first name" required><br>
-<label for=""><b>Middle Name:</b></label>
-<input type="text" name="middle name" id="" placeholder="middle name" required><br>
-<label for=""><b>Last Name:</b></label>
-<input type="text" name="last name" id="" placeholder="last name" required><br>
-<label for=""><b>Gender</b></label>
-<select name="gender" id="">
-    <option value="Female">Female</option>
-    <option name="male" id="">Male</option>
-    <option name="other" id="">Other</option>
-</select>
-<label for=""><b>Position:</b></label>
-<input type="text" name="position" id="" required><br>
-<label for=""><b>Department:</b></label>
-<input type="text" name="department" id="" required><br>
-<label for=""><b>Join Date:</b></label>
-<input type="date" name="date" id="" required>
+    <form action="<?php htmlspecialchars($_SERVER['PHP_SELF'])?>" method ="post">
+<div class="input-field">
+    <label>Username</label>
+    <input type="text" class="input" name="username" required>
+</div>
+<div class="input-field">
+    <label>Password</label>
+    <input type="password" class="input" name="password" required>
+</div>
 
-    </form>
+<div class="input-field">
+    <input type="submit" value="login" class="btn">
+    <a href="users_add.php">register</a>
+</div>
+ </div>
+</form> 
+    
 </body>
 </html>
